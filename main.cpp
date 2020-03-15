@@ -1,5 +1,7 @@
 #include <iostream>
 #include <complex>
+#include <fstream>
+
 using namespace std;
 
 class VectorComplex{
@@ -17,7 +19,7 @@ public:
             v[i] = nr;
     }
 
-     VectorComplex(const VectorComplex &z)
+    VectorComplex(const VectorComplex &z)
     {
         numar_elemente=z.numar_elemente;
         for (int i = 0; i< z.numar_elemente; i++)
@@ -65,11 +67,9 @@ ostream& operator<<(ostream& out, const VectorComplex& z)
 }
 istream& operator>>(istream& in, VectorComplex& z)
 {
-    cout << "Dati numarul de elemente: ";
     in >> z.numar_elemente;
     for (int i = 0; i < z.numar_elemente; i++)
     {
-        cout << "Dati elementul " << i+1 << " sub forma (real, imaginar) : ";
         in >> z.v[i];
     }
     return in;
@@ -79,7 +79,7 @@ double *VectorComplex :: vector_module( )
 {
     double *q = new double[100];
     for (int i = 0; i < numar_elemente; i++)
-     q[i] = abs(v[i]);
+        q[i] = abs(v[i]);
     return q;
 }
 
@@ -87,12 +87,13 @@ void VectorComplex :: sortare_module()
 {
     double *a=vector_module();
     for (int i = 0; i < numar_elemente-1; i++)
-    for(int j = i+1; j < numar_elemente; j++)
-        if (a[i] > a[j])
-            {complex<double> t;
-            t=v[i];
-            v[i]=v[j];
-            v[j]=t;
+        for(int j = i+1; j < numar_elemente; j++)
+            if (a[i] > a[j])
+            {
+                complex<double> t;
+                t=v[i];
+                v[i]=v[j];
+                v[j]=t;
             }
     delete a;
 }
@@ -116,42 +117,40 @@ complex<double> operator *(VectorComplex const &x, VectorComplex const &y)
 
 void citire(int &n, VectorComplex ob[100])
 {
-    cout<<"Numarul de obiecte care se citesc: ";
     cin>>n;
     for (int i=0; i<n; i++)
-          cin>>ob[i];
+        cin>>ob[i];
     for(int i=0; i<n; i++)
-          cout<<"Obiectul "<<i+1<<" "<<ob[i]<<'\n';
+        cout<<"Obiectul "<<i+1<<" "<<ob[i]<<'\n';
 }
 
 
 
 int main() {
 
-        VectorComplex ob[100];
-        int n;
-        complex<double> scalarp, c;
+    freopen("data.in","r", stdin);
+    VectorComplex ob[100];
+    int n;
+    complex<double> scalarp, c;
 
-        citire(n, ob);
+    citire(n, ob);
 
-        double *x;
-        x=ob[0].vector_module();
-        cout << "\n" << "Vectorul de module pentru primul element este: " << "\n";
-        for(int i = 0; i < ob[0].size(); i++)
-            {
-                cout << x[i] << " ";
-            }
-        delete x;
+    double *x;
+    x=ob[0].vector_module();
+    cout << "\n" << "Vectorul de module pentru primul element este: " << "\n";
+    for(int i = 0; i < ob[0].size(); i++)
+        cout << x[i] << " ";
+    delete x;
 
-        ob[0].sortare_module();
-        cout << "\n" << "Vectorul sortat dupa module este:" << ob[0];
+    ob[0].sortare_module();
+    cout << "\n" << "Vectorul sortat dupa module este:" << ob[0];
 
-        c=ob[0].suma_complexe();
-        cout << "\n" << "Suma elementelor este " << c;
+    c=ob[0].suma_complexe();
+    cout << "\n" << "Suma elementelor este " << c;
 
-        scalarp= ob[0] * ob[1];
-        cout << "\n" << "Produsul scalar al primilor doi vectori este: " << scalarp;
+    scalarp= ob[0] * ob[1];
+    cout << "\n" << "Produsul scalar al primilor doi vectori este: " << scalarp;
 
-
+    fclose(stdin);
     return 0;
 }
